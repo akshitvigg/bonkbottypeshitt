@@ -7,6 +7,7 @@ import { Connection, Keypair, Transaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import dotenv from "dotenv";
 import cors from "cors";
+import { auth } from "./auth";
 
 dotenv.config();
 
@@ -68,13 +69,21 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-app.post("/txn/sign", async (req, res) => {
+app.post("/txn/sign", auth, async (req, res) => {
+  const userId = req.userId;
+
   const serializedTxns = req.body.serializedTxns;
 
+  const user = await userModel.findById(userId);
+  if (!user) {
+    res.json({
+      message: "unauthorized user or user does not exist",
+    });
+  }
+
+  const secretKey = new Uint8Array(user!.privateKey);
+  const keypair = Keypair.fromSecretKey(secretKey);
   const txn = Transaction.from(Buffer.from(serializedTxns));
-  const keypair = Keypair.fromSecretKey(
-    bs58.decode(process.env.PRIVATE_KEY as string)
-  );
 
   txn.sign(keypair);
 

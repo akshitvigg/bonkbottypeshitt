@@ -18,9 +18,9 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const web3_js_1 = require("@solana/web3.js");
-const bs58_1 = __importDefault(require("bs58"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
+const auth_1 = require("./auth");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
@@ -67,10 +67,18 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 }));
-app.post("/txn/sign", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/txn/sign", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
     const serializedTxns = req.body.serializedTxns;
+    const user = yield db_1.userModel.findById(userId);
+    if (!user) {
+        res.json({
+            message: "unauthorized user or user does not exist",
+        });
+    }
+    const secretKey = new Uint8Array(user.privateKey);
+    const keypair = web3_js_1.Keypair.fromSecretKey(secretKey);
     const txn = web3_js_1.Transaction.from(Buffer.from(serializedTxns));
-    const keypair = web3_js_1.Keypair.fromSecretKey(bs58_1.default.decode(process.env.PRIVATE_KEY));
     txn.sign(keypair);
     const signature = yield connection.sendRawTransaction(txn.serialize());
     console.log(signature);
