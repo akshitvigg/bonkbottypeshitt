@@ -7,9 +7,8 @@ interface JwtPayloadWithId extends JwtPayload {
   id: string;
 }
 export const auth = (req: Request, res: Response, next: NextFunction) => {
-  console.log("befoer token");
   const token = req.headers["authorization"];
-  console.log("after token ");
+  console.log(token);
   const decodedToken = jwt.verify(
     token as string,
     process.env.SECRET as string

@@ -28,13 +28,15 @@ app.use(express_1.default.json());
 const PORT = 3000;
 const connection = new web3_js_1.Connection("https://solana-devnet.g.alchemy.com/v2/rcKewhEi1DhcCldkNH-Ls8SlXjTd3HIy");
 app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("req came");
     const { username, password } = req.body;
     const hashedpass = yield bcrypt_1.default.hash(password, 8);
+    console.log(hashedpass);
     const keypair = new web3_js_1.Keypair();
     yield db_1.userModel.create({
         username: username,
         password: hashedpass,
-        privateKey: keypair.secretKey,
+        privateKey: Array.from(keypair.secretKey),
         publicKey: keypair.publicKey,
     });
     res.json({
@@ -59,6 +61,7 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.json({
             message: "signed in successfully",
             token: token,
+            pvtkey: user.privateKey,
         });
     }
     else {
@@ -67,8 +70,21 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 }));
+app.get("/getinfo", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    const user = yield db_1.userModel.findById(userId);
+    if (!user) {
+        res.json({
+            message: "user not found",
+        });
+    }
+    res.json({
+        pubKey: user === null || user === void 0 ? void 0 : user.publicKey,
+    });
+}));
 app.post("/txn/sign", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
+    console.log("txn came");
     const serializedTxns = req.body.serializedTxns;
     const user = yield db_1.userModel.findById(userId);
     if (!user) {

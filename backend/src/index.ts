@@ -23,15 +23,17 @@ const connection = new Connection(
 );
 
 app.post("/signup", async (req, res) => {
+  console.log("req came");
   const { username, password } = req.body;
 
   const hashedpass = await bcrypt.hash(password, 8);
+  console.log(hashedpass);
   const keypair = new Keypair();
 
   await userModel.create({
     username: username,
     password: hashedpass,
-    privateKey: keypair.secretKey,
+    privateKey: Array.from(keypair.secretKey),
     publicKey: keypair.publicKey,
   });
 
@@ -61,6 +63,7 @@ app.post("/signin", async (req, res) => {
     res.json({
       message: "signed in successfully",
       token: token,
+      pvtkey: user.privateKey,
     });
   } else {
     res.json({
@@ -69,8 +72,25 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+app.get("/getinfo", auth, async (req, res) => {
+  const userId = req.userId;
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    res.json({
+      message: "user not found",
+    });
+  }
+
+  res.json({
+    pubKey: user?.publicKey,
+  });
+});
+
 app.post("/txn/sign", auth, async (req, res) => {
   const userId = req.userId;
+  console.log("txn came");
 
   const serializedTxns = req.body.serializedTxns;
 
