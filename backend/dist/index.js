@@ -22,7 +22,6 @@ const bs58_1 = __importDefault(require("bs58"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
-const secret = "random";
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -56,7 +55,7 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     const hashedpass = yield bcrypt_1.default.compare(password, user.password);
     if (hashedpass) {
-        const token = jsonwebtoken_1.default.sign({ id: user._id }, secret);
+        const token = jsonwebtoken_1.default.sign({ id: user._id }, process.env.SECRET);
         res.json({
             message: "signed in successfully",
             token: token,
