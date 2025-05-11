@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-{"root":["./src/db.ts","./src/index.ts"],"version":"5.8.3"}
-=======
-{"root":["./src/auth.ts","./src/db.ts","./src/index.ts","./types/express.d.ts"],"version":"5.8.3"}
->>>>>>> 73f1fa3 (init)
