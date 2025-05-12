@@ -31,8 +31,8 @@ const AuthComp = ({ isSignup }: AuthCompProps) => {
     navigate("/txnslogic");
   }
   return (
-    <div>
-      <div className="   mt-44 flex items-center justify-center">
+    <div data-aos="fade-up" data-aos-duration="10000">
+      <div className="  [font-family:var(--font-handwriting)]  mt-44 flex items-center justify-center">
         <div className=" border-2 border-zinc-200 rounded-md p-10 space-y-3">
           <div className=" mb-4 space-y-6">
             <p className=" pb-5 text-center text-4xl font-bold">
