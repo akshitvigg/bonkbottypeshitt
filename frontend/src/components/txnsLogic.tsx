@@ -11,7 +11,7 @@ import { Input } from "./ui/input";
 import Button from "./ui/button";
 import Loader from "./ui/loader";
 
-const TxnsLogic = () => {
+const TxnsLogic = ({ setModalOpen, modalOpen }: any) => {
   const [publicKey, setpubKey] = useState("");
   const toRef = useRef<HTMLInputElement>(null);
   const amountRef = useRef<HTMLInputElement>(null);
@@ -90,14 +90,14 @@ const TxnsLogic = () => {
   return (
     <div className="[font-family:var(--font-handwriting)] min-h-screen  ">
       <div className=" borde flex justify-end mt-4 mr-7">
-        akj
-        {/* <Button
+        <Button
+          onClick={setModalOpen(!modalOpen)}
           statusColor={colorbool}
           value={"Public Key"}
           status={true}
           variant="primary"
           size="md"
-        /> */}
+        />
       </div>
       <div className="flex justify-center  mt-34">
         <div className=" border-2 rounded-3xl border-zinc-200 pb-10 pt-10 px-10 space-y-6">
