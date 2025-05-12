@@ -1,5 +1,5 @@
 interface ButtonProps {
-  value: string;
+  value: any;
   size: "md" | "lg";
   variant: "primary" | "secondary";
   onClick: () => void;
@@ -18,7 +18,7 @@ type sizes = "md" | "lg";
 
 const sizeStyles = new Map<sizes, string>();
 sizeStyles.set("md", "py-2 px-33 rounded-md ");
-sizeStyles.set("lg", "py-3 px-33.5 rounded-lg ");
+sizeStyles.set("lg", "py-3 w-[320px] rounded-lg ");
 
 export default function Button(props: ButtonProps) {
   return (
