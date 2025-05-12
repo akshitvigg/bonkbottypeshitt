@@ -79,7 +79,7 @@ const AuthComp = ({ isSignup }: AuthCompProps) => {
   return (
     <div data-aos="fade-up" data-aos-duration="10000">
       <div className="  [font-family:var(--font-handwriting)]  mt-44 flex items-center justify-center">
-        <div className=" border-2 border-zinc-200 rounded-md p-10 space-y-3">
+        <div className=" border-2 border-zinc-200 rounded-3xl p-10 space-y-3">
           <p className="  text-center text-4xl font-bold">
             {isSignup ? "Sign Up" : "Sign in"}
           </p>
