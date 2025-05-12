@@ -74,11 +74,10 @@ const TxnsLogic = () => {
 
   return (
     <div className=" min-h-screen  flex justify-center items-center">
-      <div className=" space-y-6">
+      <div data-aos="fade-up" className=" space-y-6">
         <Input reference={toRef} size="lg" placeholder="to" />
         <Input size="lg" reference={amountRef} placeholder="amount" />
         <Button value="Send" variant="primary" size="lg" onClick={sendSol} />
-        pubkey - <b>{publicKey}</b>
       </div>
     </div>
   );

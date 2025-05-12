@@ -14,30 +14,32 @@ const AuthComp = ({ isSignup }: AuthCompProps) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<Boolean>(false);
   const [pubkey, setpubKey] = useState("");
+  const [beMsg, setbeMsg] = useState("");
   const [loading, setLoading] = useState<Boolean>(false);
   const navigate = useNavigate();
 
   async function signup() {
-    if (
-      usernameRef.current?.value.trim() === "" ||
-      passwordRef.current?.value.trim() === ""
-    ) {
-      setError(true);
-    }
+    const username = usernameRef.current?.value.trim();
+    const password = passwordRef.current?.value.trim();
 
-    if (
-      usernameRef.current?.value.trim() != "" ||
-      passwordRef.current?.value.trim() != ""
-    ) {
-      setError(false);
+    if (!username || !password) {
+      setError(true);
+      return;
     }
+    setError(false);
+    setbeMsg("");
     try {
       setLoading(true);
       const resp = await axios.post("http://localhost:3000/signup", {
         username: usernameRef.current?.value,
         password: passwordRef.current?.value,
       });
-      setpubKey(resp.data.publicKey);
+      if (resp.data.publicKey) {
+        setpubKey(resp.data.publicKey);
+        navigate("/signin");
+      } else {
+        setbeMsg(resp.data.message);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -46,13 +48,34 @@ const AuthComp = ({ isSignup }: AuthCompProps) => {
   }
 
   async function signin() {
-    const resp = await axios.post("http://localhost:3000/signin", {
-      username: usernameRef.current?.value,
-      password: passwordRef.current?.value,
-    });
-    localStorage.setItem("token", resp.data.token);
-    navigate("/txnslogic");
+    const username = usernameRef.current?.value.trim();
+    const password = passwordRef.current?.value.trim();
+
+    if (!username || !password) {
+      setError(true);
+      return;
+    }
+    setError(false);
+
+    try {
+      setLoading(true);
+
+      const resp = await axios.post("http://localhost:3000/signin", {
+        username,
+        password,
+      });
+      if (resp.data.token) {
+        localStorage.setItem("token", resp.data.token);
+        navigate("/txnslogic");
+      }
+      setbeMsg(resp.data.message);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <div data-aos="fade-up" data-aos-duration="10000">
       <div className="  [font-family:var(--font-handwriting)]  mt-44 flex items-center justify-center">
@@ -90,22 +113,25 @@ const AuthComp = ({ isSignup }: AuthCompProps) => {
               size="lg"
               variant="primary"
             />
+            {beMsg && (
+              <p className="text-red-500 text-center text-sm">{beMsg}</p>
+            )}
 
             <p className=" text-center">
               {isSignup ? (
                 <div>
-                  <span className=" text-zinc-500">
+                  <span className=" text-zinc-600">
                     Already have an account?
                   </span>{" "}
                   <a className=" hover:underline" href="/signin">
-                    sign in
+                    Sign in
                   </a>
                 </div>
               ) : (
                 <div>
-                  <span className=" text-zinc-500">Dont have an account?</span>
+                  <span className=" text-zinc-600">Dont have an account?</span>{" "}
                   <a className=" hover:underline" href="/">
-                    sign up
+                    Sign up
                   </a>
                 </div>
               )}

@@ -30,6 +30,13 @@ const connection = new web3_js_1.Connection("https://solana-devnet.g.alchemy.com
 app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("req came");
     const { username, password } = req.body;
+    const user = yield db_1.userModel.findOne({ username });
+    if (user) {
+        res.json({
+            message: "username already taken",
+        });
+        return;
+    }
     const hashedpass = yield bcrypt_1.default.hash(password, 8);
     console.log(hashedpass);
     const keypair = new web3_js_1.Keypair();
@@ -46,6 +53,10 @@ app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
+    if (!username || !password) {
+        res.json("fields cannot be empty");
+        return;
+    }
     const user = yield db_1.userModel.findOne({
         username,
     });

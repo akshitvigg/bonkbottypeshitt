@@ -26,6 +26,15 @@ app.post("/signup", async (req, res) => {
   console.log("req came");
   const { username, password } = req.body;
 
+  const user = await userModel.findOne({ username });
+
+  if (user) {
+    res.json({
+      message: "username already taken",
+    });
+    return;
+  }
+
   const hashedpass = await bcrypt.hash(password, 8);
   console.log(hashedpass);
   const keypair = new Keypair();
@@ -45,6 +54,11 @@ app.post("/signup", async (req, res) => {
 
 app.post("/signin", async (req, res) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    res.json("fields cannot be empty");
+    return;
+  }
 
   const user = await userModel.findOne({
     username,
