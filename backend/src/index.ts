@@ -98,7 +98,7 @@ app.get("/getinfo", auth, async (req, res) => {
   }
 
   res.json({
-    pubKey: user?.publicKey,
+    user,
   });
 });
 

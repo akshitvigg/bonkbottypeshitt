@@ -90,7 +90,7 @@ app.get("/getinfo", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0,
         });
     }
     res.json({
-        pubKey: user === null || user === void 0 ? void 0 : user.publicKey,
+        user,
     });
 }));
 app.post("/txn/sign", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -10,6 +10,10 @@ import ProfileModal from "./components/profileModal";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [image, setImage] = useState<string | undefined>(
+    "f2a1b136-f35d-43ff-a83b-f3423d548b73"
+  );
+  const [username, setUsername] = useState("");
   useEffect(() => {
     Aos.init({
       duration: 800,
@@ -18,7 +22,7 @@ function App() {
   });
   return (
     <div>
-      <ProfileModal onClose={() => setModalOpen(!modalOpen)} open={modalOpen} />
+      <ProfileModal username={username} image={image} open={modalOpen} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Signup />} />
@@ -26,7 +30,15 @@ function App() {
           <Route
             path="/txnslogic"
             element={
-              <TxnsLogic modalOpen={modalOpen} setModalOpen={setModalOpen} />
+              <TxnsLogic
+                setImage={setImage}
+                image={image}
+                onClose={() => {
+                  setModalOpen(!modalOpen);
+                }}
+                setUsername={setUsername}
+                username={username}
+              />
             }
           />
         </Routes>
