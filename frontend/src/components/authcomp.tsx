@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Button from "./ui/button";
 import { Input } from "./ui/input";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Loader from "./ui/loader";
 
 interface AuthCompProps {
