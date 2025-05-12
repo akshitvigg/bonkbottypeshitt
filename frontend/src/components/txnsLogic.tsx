@@ -11,13 +11,20 @@ import { Input } from "./ui/input";
 import Button from "./ui/button";
 import Loader from "./ui/loader";
 
-const TxnsLogic = ({ setModalOpen, modalOpen }: any) => {
+const TxnsLogic = ({
+  onClose,
+  setImage,
+  image,
+  setUsername,
+  username,
+}: any) => {
   const [publicKey, setpubKey] = useState("");
   const toRef = useRef<HTMLInputElement>(null);
   const amountRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<boolean>(false);
   const [colorbool, setcolorbool] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
   const connection = new Connection(
     "https://solana-devnet.g.alchemy.com/v2/rcKewhEi1DhcCldkNH-Ls8SlXjTd3HIy"
   );
@@ -29,15 +36,27 @@ const TxnsLogic = ({ setModalOpen, modalOpen }: any) => {
           Authorization: localStorage.getItem("token"),
         },
       });
-      if (resp.data.pubKey) {
-        setpubKey(resp.data.pubKey);
+      if (resp.data.user) {
+        setUsername(resp.data.user.username);
+        setpubKey(resp.data.user.publicKey);
+        console.log(resp.data.user.username, resp.data.user.publicKey);
         setcolorbool(true);
       }
     }
     getpubkey();
   }, []);
 
+  const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const objecturl = URL.createObjectURL(file);
+      setImage(objecturl);
+      console.log(objecturl);
+    }
+  };
+
   const sendSol = async () => {
+    console.log(image);
     const to = toRef.current?.value;
     const amount = parseFloat(amountRef.current?.value || "0");
     setLoading(true);
@@ -89,18 +108,23 @@ const TxnsLogic = ({ setModalOpen, modalOpen }: any) => {
 
   return (
     <div className="[font-family:var(--font-handwriting)] min-h-screen  ">
-      <div className=" borde flex justify-end mt-4 mr-7">
+      <div data-aos="fade-left" className="  flex justify-end mt-4 mr-7">
         <Button
-          onClick={setModalOpen(!modalOpen)}
+          onClick={onClose}
           statusColor={colorbool}
-          value={"Public Key"}
+          value={username}
           status={true}
           variant="primary"
           size="md"
+          imgUrl={image}
+          changefn={handlechange}
         />
       </div>
       <div className="flex justify-center  mt-34">
-        <div className=" border-2 rounded-3xl border-zinc-200 pb-10 pt-10 px-10 space-y-6">
+        <div
+          data-aos="fade-up"
+          className=" border-2 rounded-3xl border-zinc-200 pb-10 pt-10 px-10 space-y-6"
+        >
           <p className=" text-center text-3xl font-bold">Transaction</p>
           <Input reference={toRef} size="lg" placeholder="to" />
           {error && (

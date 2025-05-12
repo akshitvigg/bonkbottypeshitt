@@ -5,6 +5,9 @@ interface ButtonProps {
   onClick?: () => void;
   status?: boolean;
   statusColor?: boolean;
+  image?: boolean;
+  changefn?: any;
+  imgUrl?: any;
 }
 
 type variants = "primary" | "secondary";
@@ -33,14 +36,23 @@ export default function Button(props: ButtonProps) {
           props.size
         )}`}
       >
-        {props.value}{" "}
+        <label>
+          <img src={props.imgUrl} alt="" width={30} className=" rounded-full" />
+          <input
+            type="file"
+            onChange={props.changefn}
+            accept="image/*"
+            className=" hidden"
+          />
+        </label>
         {props.status && (
           <p
-            className={`items-center mt-2.5 ml-2.5  ${
+            className={`items-center translate-y-5 -translate-x-1   ${
               props.statusColor ? "bg-green-500" : "bg-red-500"
             } w-2 rounded-full h-2 `}
           ></p>
         )}
+        {props.value}{" "}
       </button>
     </div>
   );
