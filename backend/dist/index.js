@@ -115,8 +115,8 @@ app.post("/txn/sign", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 
 }));
 app.get("/txn", (req, res) => { });
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield mongoose_1.default.connect("mongodb+srv://akshitvig213:TzHRadb1s9w9vAlh@cluster0.wvw0s.mongodb.net/cloudWallet");
-    console.log("database connected");
+    yield mongoose_1.default.connect(process.env.MONGO_URL);
+    console.log("database connected" + process.env.MONGO_URL);
     app.listen(3000);
     console.log("server started listening on ", PORT);
 });
