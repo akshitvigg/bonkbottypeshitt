@@ -10,9 +10,7 @@ import ProfileModal from "./components/profileModal";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [image, setImage] = useState<string | undefined>(
-    "f2a1b136-f35d-43ff-a83b-f3423d548b73"
-  );
+  const [image, setImage] = useState<string | undefined>();
   const [username, setUsername] = useState("");
   useEffect(() => {
     Aos.init({
