@@ -132,10 +132,8 @@ app.post("/txn/sign", auth, async (req, res) => {
 app.get("/txn", (req, res) => {});
 
 const connect = async () => {
-  await mongoose.connect(
-    "mongodb+srv://akshitvig213:TzHRadb1s9w9vAlh@cluster0.wvw0s.mongodb.net/cloudWallet"
-  );
-  console.log("database connected");
+  await mongoose.connect(process.env.MONGO_URL as string);
+  console.log("database connected" + process.env.MONGO_URL);
   app.listen(3000);
   console.log("server started listening on ", PORT);
 };
