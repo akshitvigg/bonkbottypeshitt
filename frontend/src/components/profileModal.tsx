@@ -26,7 +26,7 @@ const ProfileModal = ({ open, image, username }: any) => {
             <div>
               <button
                 onClick={logout}
-                className=" bg-red-100 p-3 translate-y-8 rounded-2xl text-red-500 cursor-pointer"
+                className=" bg-red-100 p-3 translate-y-8 -translate-x-24 rounded-2xl text-red-500 cursor-pointer"
               >
                 {" "}
                 Logout
